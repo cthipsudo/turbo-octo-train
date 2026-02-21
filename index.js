@@ -93,50 +93,38 @@ app.get("/products/new", (req, res) => {
   res.render("products/new", { categories });
 });
 
-app.get(
-  "/products/:id",
-  wrapAsync(async (req, res, next) => {
-    const { id } = req.params;
-    const product = await Product.findById(id);
-    if (!product) {
-      throw new appError("Product Not Found", 404);
-    }
-    res.render("products/show", { product });
-  }),
-);
+app.get("/products/:id", async (req, res, next) => {
+  const { id } = req.params;
+  const product = await Product.findById(id);
+  if (!product) {
+    throw new appError("Product Not Found", 404);
+  }
+  res.render("products/show", { product });
+});
 
-app.get(
-  "/products/:id/edit",
-  wrapAsync(async (req, res, next) => {
-    const { id } = req.params;
-    const product = await Product.findById(id);
-    if (!product) {
-      throw new appError("Product Not Found", 404);
-    }
-    res.render("products/edit", { product, categories });
-  }),
-);
+app.get("/products/:id/edit", async (req, res, next) => {
+  const { id } = req.params;
+  const product = await Product.findById(id);
+  if (!product) {
+    throw new appError("Product Not Found", 404);
+  }
+  res.render("products/edit", { product, categories });
+});
 
-app.put(
-  "/products/:id",
-  wrapAsync(async (req, res, next) => {
-    const { id } = req.params;
-    const product = await Product.findByIdAndUpdate(id, req.body, {
-      runValidators: true,
-      new: true,
-    });
-    res.redirect(`/products/${product._id}`);
-  }),
-);
+app.put("/products/:id", async (req, res, next) => {
+  const { id } = req.params;
+  const product = await Product.findByIdAndUpdate(id, req.body, {
+    runValidators: true,
+    new: true,
+  });
+  res.redirect(`/products/${product._id}`);
+});
 
-app.delete(
-  "/products/:id",
-  wrapAsync(async (req, res, next) => {
-    const { id } = req.params;
-    const deletedProduct = await Product.findByIdAndDelete(id);
-    res.redirect("/products");
-  }),
-);
+app.delete("/products/:id", async (req, res, next) => {
+  const { id } = req.params;
+  const deletedProduct = await Product.findByIdAndDelete(id);
+  res.redirect("/products");
+});
 
 const handleValidationErr = (err) => {
   console.dir(err);
