@@ -5,9 +5,10 @@ const mongoose = require("mongoose");
 const methodOverride = require("method-override");
 
 const Product = require("./models/product");
+const Farm = require("./models/farm");
 
 mongoose
-  .connect("mongodb://127.0.0.1:27017/farmStand")
+  .connect("mongodb://127.0.0.1:27017/farmStand3")
   .then(() => {
     console.log("Mongo Connection Open!!");
   })
@@ -21,6 +22,50 @@ app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 
 const categories = ["fruit", "vegatable", "dairy"];
+
+// FARM ROUTES
+
+app.get("/farms", async (req, res) => {
+  const farms = await Farm.find({});
+
+  res.render("farms/index", { farms });
+});
+
+app.get("/farms/new", (req, res) => {
+  res.render("farms/new");
+});
+
+app.post("/farms", async (req, res) => {
+  const newFarm = new Farm(req.body);
+  await newFarm.save();
+  res.redirect("/farms");
+});
+
+app.get("/farms/:id", async (req, res) => {
+  const { id } = req.params;
+  const farm = await Farm.findById(id);
+  res.render("farms/show", { farm });
+});
+
+app.get("/farms/:id/products/new", (req, res) => {
+  const { id } = req.params;
+  res.render("products/new", { categories, id });
+});
+
+app.post("/farms/:id/products", async (req, res) => {
+  const { id } = req.params;
+  const farm = await Farm.findById(id);
+  const { name, price, category } = req.body;
+  const newProduct = new Product({ name, price, category });
+  farm.products.push(newProduct);
+  newProduct.farm = farm;
+  await farm.save();
+  await newProduct.save();
+  res.send(farm);
+  //newProduct.save();
+});
+
+// PRODUCT ROUTES
 
 app.get("/products", async (req, res) => {
   const { category } = req.query;

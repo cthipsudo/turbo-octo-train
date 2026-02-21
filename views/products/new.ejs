@@ -1,24 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>New Product</title>
-  </head>
-  <body>
-    <h1>Add a Product</h1>
-    <form action="/products" method="POST">
-      <label for="name">Name of Fruit</label>
-      <input type="text" name="name" id="name" placeholder="product name" />
-      <label for="price">Price (Unit)</label>
-      <input type="number" name="price" id="price" placeholder="price" />
-      <label for="category">Select category:</label>
-      <select name="category" id="category">
-        <% for (let cat of categories) {%>
-          <option value="<%= cat %>"><%= cat %></option>
-        <% } %>
-      </select>
-      <button>Submit</button>
-    </form>
-  </body>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>New Product</title>
+</head>
+
+<body>
+  <h1>Add a Product</h1>
+  <form action="/farms/<%= id %>/products" method="POST">
+    <label for="name">Name of Fruit</label>
+    <input type="text" name="name" id="name" placeholder="product name" />
+    <label for="price">Price (Unit)</label>
+    <input type="number" name="price" id="price" placeholder="price" />
+    <label for="category">Select category:</label>
+    <select name="category" id="category">
+      <% for (let cat of categories) {%>
+      <option value="<%= cat %>"><%= cat %></option>
+      <% } %>
+    </select>
+    <button>Submit</button>
+  </form>
+</body>
+
 </html>
